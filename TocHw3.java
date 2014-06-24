@@ -1,5 +1,3 @@
-package testre;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -10,7 +8,7 @@ import java.util.regex.Matcher;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
-public class testjson {
+public class TocHw3 {
 	
 	private String sentHttpRequest(String url) throws Exception{
 		URL obj = new URL(url);
@@ -27,31 +25,28 @@ public class testjson {
 	}
 	
 	public static void main(String[] args){
-		testjson jj = new testjson();
-		String tt = "http://www.datagarage.io/api/5365dee31bc6e9d9463a0057";
+		TocHw3 jj = new TocHw3();
+		String url = args[0];
 		String result;
 		int i;
 		try{
-			result = jj.sentHttpRequest(tt);
+			result = jj.sentHttpRequest(url);
 			//JSONObject jsonobject = new JSONObject(result);
 			//System.out.println(jsonobject);
 			JSONArray array = new JSONArray(result);
-			Pattern pattern1 = Pattern.compile(".*文山區.*辛亥路.*103.*");
-			//Pattern pattern2 = Pattern.compile(".*�_���n��.*");
-			//Pattern pattern3 = Pattern.compile(".*103.*");
+			Pattern pattern1 = Pattern.compile(".*" + args[1] + "*");
+			Pattern pattern2 = Pattern.compile(".*" + args[2] + ".*");
+			Pattern pattern3 = Pattern.compile(".*" + args[3] + ".*");
 			int total = 0, numberOfResult = 0;
-			System.out.println(array.length());
 			for(i = 0; i < array.length(); i++){
 				Matcher matcher1 = pattern1.matcher(array.get(i).toString());
-				//Matcher matcher2 = pattern2.matcher(array.get(i).toString());
-				//Matcher matcher3 = pattern3.matcher(array.get(i).toString());
-				if(matcher1.matches()){
-					System.out.println(matcher1.group(0));
+				Matcher matcher2 = pattern2.matcher(array.get(i).toString());
+				Matcher matcher3 = pattern3.matcher(array.get(i).toString());
+				if(matcher1.matches() && matcher2.matches() && matcher3.matches()){
 					numberOfResult++;
 					total += array.getJSONObject(i).getInt("總價元");
 				}
 			}
-			System.out.println(i);
 			System.out.println(total / numberOfResult);
 		}catch(Exception e){
 			System.out.println(e.getMessage());
