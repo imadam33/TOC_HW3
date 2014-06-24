@@ -34,9 +34,9 @@ public class TocHw3 {
 			//JSONObject jsonobject = new JSONObject(result);
 			//System.out.println(jsonobject);
 			JSONArray array = new JSONArray(result);
-			Pattern pattern1 = Pattern.compile(".*" + args[1] + "*");
+			Pattern pattern1 = Pattern.compile(".*" + args[1] + ".*");
 			Pattern pattern2 = Pattern.compile(".*" + args[2] + ".*");
-			Pattern pattern3 = Pattern.compile(".*" + args[3] + ".*");
+			Pattern pattern3 = Pattern.compile(".*交易年月.*" + args[3] + ".*");
 			int total = 0, numberOfResult = 0;
 			for(i = 0; i < array.length(); i++){
 				Matcher matcher1 = pattern1.matcher(array.get(i).toString());
