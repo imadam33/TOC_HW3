@@ -37,34 +37,36 @@ public class TocHw3 {
 	public static void main(String[] args){
 		if(args.length != 4)
 			System.out.println("arg個數不對");
-		TocHw3 hw3 = new TocHw3();
-		String url = args[0];
-		String result;
-		int i;
-		try{
-			result = hw3.sentHttpRequest(url);
-			
-			//把parse到的資料存成JSONArray
-			JSONArray array = new JSONArray(result);
-			Pattern pattern1 = Pattern.compile(".*" + args[1] + ".*");	//判斷鄉政市區
-			Pattern pattern2 = Pattern.compile(".*" + args[2] + ".*");	//判斷土地區段位置或建物區門牌
-			int total = 0, numberOfResult = 0;
-			int year = Integer.valueOf(args[3] + "00");		//判斷交易年月
-			for(i = 0; i < array.length(); i++){
-				Matcher matcher1 = pattern1.matcher(array.getJSONObject(i).getString("鄉鎮市區"));
-				Matcher matcher2 = pattern2.matcher(array.getJSONObject(i).getString("土地區段位置或建物區門牌"));
-				int getyear = array.getJSONObject(i).getInt("交易年月");
-				if(matcher1.matches() && matcher2.matches() && getyear >= year){
-					numberOfResult++;
-					total += array.getJSONObject(i).getInt("總價元");
+		else{
+			TocHw3 hw3 = new TocHw3();
+			String url = args[0];
+			String result;
+			int i;
+			try{
+				result = hw3.sentHttpRequest(url);
+				
+				//把parse到的資料存成JSONArray
+				JSONArray array = new JSONArray(result);
+				Pattern pattern1 = Pattern.compile(".*" + args[1] + ".*");	//判斷鄉政市區
+				Pattern pattern2 = Pattern.compile(".*" + args[2] + ".*");	//判斷土地區段位置或建物區門牌
+				int total = 0, numberOfResult = 0;
+				int year = Integer.valueOf(args[3] + "00");		//判斷交易年月
+				for(i = 0; i < array.length(); i++){
+					Matcher matcher1 = pattern1.matcher(array.getJSONObject(i).getString("鄉鎮市區"));
+					Matcher matcher2 = pattern2.matcher(array.getJSONObject(i).getString("土地區段位置或建物區門牌"));
+					int getyear = array.getJSONObject(i).getInt("交易年月");
+					if(matcher1.matches() && matcher2.matches() && getyear >= year){
+						numberOfResult++;
+						total += array.getJSONObject(i).getInt("總價元");
+					}
 				}
+				if(numberOfResult != 0)
+					System.out.println(total / numberOfResult);
+				else
+					System.out.println("沒有找到任和一筆資料符合要求");
+			}catch(Exception e){
+				System.out.println(e.getMessage());
 			}
-			if(numberOfResult != 0)
-				System.out.println(total / numberOfResult);
-			else
-				System.out.println("沒有找到任和一筆資料符合要求");
-		}catch(Exception e){
-			System.out.println(e.getMessage());
 		}
 	}
 }
